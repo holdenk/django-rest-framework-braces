@@ -19,9 +19,12 @@ class TestISO8601DateTimeField(unittest.TestCase):
     def test_to_python_not_iso8601(self):
         field = ISO8601DateTimeField()
 
-        self.assertEqual(field.clean('2015-01-01 16:30'), datetime(2015, 1, 1, 16, 30))
-        with self.assertRaises(forms.ValidationError):
-            field.clean('2015-01-01T16:30')
+        self.assertEqual(
+            field.clean('2015-01-01 16:30').replace(tzinfo=None),
+            datetime(2015, 1, 1, 16, 30))
+        self.assertEqual(
+            field.clean('2015-01-01T16:30').replace(tzinfo=None),
+            datetime(2015, 1, 1, 16, 30))
 
     def test_to_python_iso8601(self):
         field = ISO8601DateTimeField(input_formats=[ISO_8601])

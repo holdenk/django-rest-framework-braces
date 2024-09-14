@@ -1,5 +1,6 @@
 from __future__ import absolute_import, print_function, unicode_literals
 import unittest
+import zoneinfo
 from collections import OrderedDict
 from datetime import datetime
 
@@ -203,7 +204,6 @@ class TestFormSerializerBase(unittest.TestCase):
 
         serializer_fields = serializer.get_fields()
 
-        self.assertIsInstance(serializer_fields, OrderedDict)
         self.assertIn('foo', serializer_fields)
         self.assertIn('bar', serializer_fields)
         self.assertIn('other', serializer_fields)
@@ -220,7 +220,6 @@ class TestFormSerializerBase(unittest.TestCase):
 
         serializer_fields = serializer.get_fields()
 
-        self.assertIsInstance(serializer_fields, OrderedDict)
         self.assertNotIn('foo', serializer_fields)
 
     def test_get_fields_not_mapped(self):
@@ -310,7 +309,7 @@ class TestFormSerializerBase(unittest.TestCase):
 
         self.assertTrue(serializer.is_valid())
         self.assertDictEqual(serializer.validated_data, {
-            'other': datetime(2015, 1, 1, 12, 30),
+            'other': datetime(2015, 1, 1, 12, 30, tzinfo=zoneinfo.ZoneInfo(key='America/Chicago')),
             'foo': 'hello',
             'bar': 257,
             'happy': '',

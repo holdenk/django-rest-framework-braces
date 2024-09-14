@@ -1,5 +1,6 @@
 from __future__ import absolute_import, print_function, unicode_literals
 import unittest
+import zoneinfo
 from datetime import datetime
 
 import mock
@@ -222,7 +223,9 @@ class TestSerializerForm(unittest.TestCase):
         self.assertTrue(form.is_valid(), dict(form.errors))
         self.assertDictEqual(form.cleaned_data, {
             'bar': 500,
-            'exclude': datetime(2016, 1, 1, 16, 30)
+            'exclude': datetime(
+                2016, 1, 1, 16, 30,
+                tzinfo=zoneinfo.ZoneInfo(key='America/Chicago'))
         })
 
     def test_full_clean_invalid(self):
