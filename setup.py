@@ -28,7 +28,7 @@ test_requirements = (
 )
 
 setup(
-    name='django-rest-framework-braces',
+    name='totallylegit-django-rest-framework-braces',
     version=__version__,
     author=__author__,
     description='Collection of utilities for working with DRF',
@@ -47,10 +47,8 @@ setup(
         'Natural Language :: English',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
         'Development Status :: 2 - Pre-Alpha',
     ],
 )
