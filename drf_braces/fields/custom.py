@@ -64,8 +64,10 @@ class ModelMultipleChoiceField(fields._UnvalidatedField):
     so that the serialization makes "sense." This is a hack BTW.
     """
 
-    def __init__(self, *args, choices={}, **kwargs):
+    def __init__(self, *args, to_field_name=None, queryset=None, choices={}, **kwargs):
         kwargs["validators"] = []
+        self.to_field_name = to_field_name
+        self.queryset = queryset
         self.choice_strings_to_values = {}
         super(ModelMultipleChoiceField, self).__init__(*args, **kwargs)
 
@@ -74,7 +76,8 @@ class ModelMultipleChoiceField(fields._UnvalidatedField):
 
     def _elem_to_internal_value(self, data):
         k = six.text_type(data)
-        result = self.choice_strings_to_values[k].value
+        key = self.to_field_name or "pk"
+        result = self.queryset.get(**{key: self.choice_strings_to_values[k].value})
         return result
 
 
@@ -91,7 +94,8 @@ class ModelChoiceField(fields._UnvalidatedField):
 
     def to_internal_value(self, data):
         k = six.text_type(data)
-        result = self.choice_strings_to_values[k].value
+        key = self.to_field_name or "pk"
+        result = self.queryset.get(**{key: self.choice_strings_to_values[k].value})
         return result
 
 
