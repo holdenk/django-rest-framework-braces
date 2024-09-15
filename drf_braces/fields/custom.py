@@ -58,6 +58,43 @@ class NonValidatingChoiceField(fields.ChoiceField):
             return six.text_type(data)
 
 
+class ModelMultipleChoiceField(fields._UnvalidatedField):
+    """
+    Special subclass of the multiple choice field which does a seperate lookup
+    so that the serialization makes "sense." This is a hack BTW.
+    """
+
+    def __init__(self, *args, choices={}, **kwargs):
+        kwargs["validators"] = []
+        self.choice_strings_to_values = {}
+        super(ModelMultipleChoiceField, self).__init__(*args, **kwargs)
+
+    def to_internal_value(self, data):
+        return map(self._elem_to_internal_value, data)
+
+    def _elem_to_internal_value(self, data):
+        k = six.text_type(data)
+        result = self.choice_strings_to_values[k].value
+        return result
+
+
+class ModelChoiceField(fields._UnvalidatedField):
+    """
+    Special subclass of the multiple choice field which does a seperate lookup
+    so that the serialization makes "sense." This is a hack BTW.
+    """
+
+    def __init__(self, *args, choices={}, **kwargs):
+        kwargs["validators"] = []
+        self.choice_strings_to_values = {}
+        super(ModelChoiceField, self).__init__(*args, **kwargs)
+
+    def to_internal_value(self, data):
+        k = six.text_type(data)
+        result = self.choice_strings_to_values[k].value
+        return result
+
+
 class NumericField(ValueAsTextFieldMixin, fields.IntegerField):
     default_error_messages = {
         'invalid': _('Enter a whole number.'),

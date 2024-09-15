@@ -73,9 +73,9 @@ def make_form_serializer_field(field_class, validation_form_serializer_field_mix
 FORM_SERIALIZER_FIELD_MAPPING = {
     forms.CharField: make_form_serializer_field(fields.CharField),
     forms.MultipleChoiceField: make_form_serializer_field(fields.MultipleChoiceField),
-    forms.ModelMultipleChoiceField: make_form_serializer_field(fields.MultipleChoiceField),
+    forms.ModelMultipleChoiceField: make_form_serializer_field(fields.ModelMultipleChoiceField),
     forms.ChoiceField: make_form_serializer_field(fields.ChoiceField),
-    forms.ModelChoiceField: make_form_serializer_field(fields.ChoiceField),
+    forms.ModelChoiceField: make_form_serializer_field(fields.ModelChoiceField),
     forms.BooleanField: make_form_serializer_field(fields.BooleanField),
     forms.IntegerField: make_form_serializer_field(fields.IntegerField),
     forms.EmailField: make_form_serializer_field(fields.EmailField),
@@ -253,16 +253,10 @@ class FormSerializerBase(serializers.Serializer):
             # ChoiceField natively uses choice_strings_to_values
             # in the to_internal_value flow
             elif kwarg == 'choices':
-                if (issubclass(type(form_field), forms.ModelChoiceField) or
-                    issubclass(type(form_field), forms.ModelMultipleChoiceField)):
-                    # For the model choice fields we don't want to serialize each model.
-                    field.choice_strings_to_values = {
-                        six.text_type(key): six.text_type(key) for key in OrderedDict(value).keys()
-                    }
-                else:
-                    field.choice_strings_to_values = {
-                        six.text_type(key): key for key in OrderedDict(value).keys()
-                    }
+                print(f"Building on top of {value}")
+                field.choice_strings_to_values = {
+                    six.text_type(key): key for key in OrderedDict(value).keys()
+                }
 
         return field
 
